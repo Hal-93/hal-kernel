@@ -42,10 +42,10 @@ void task_4(void)
     }
 }
 
-T_CTSK ctsk_1 = { .task = task_1 };
-T_CTSK ctsk_2 = { .task = task_2 };
-T_CTSK ctsk_3 = { .task = task_3 };
-T_CTSK ctsk_4 = { .task = task_4 };
+T_CTSK ctsk_1 = { .task = task_1, .tskpri = 1 };
+T_CTSK ctsk_2 = { .task = task_2, .tskpri = 2 };
+T_CTSK ctsk_3 = { .task = task_3, .tskpri = 3 };
+T_CTSK ctsk_4 = { .task = task_4, .tskpri = 4 };
 
 void usermain(void) 
 {

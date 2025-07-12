@@ -27,9 +27,12 @@
 
 #define MAX_TASK 10
 #define TASK_STACK_SZ 2048
+#define MAX_PRI 10
 
 typedef uint32_t    ID;
 typedef void (*FP)(void);
+typedef uint32_t PRI;
+
 
 typedef enum {
     TSKST_NON,
@@ -37,19 +40,24 @@ typedef enum {
     TSKST_READY,
 } TASK_ST;
 
-typedef struct {
+typedef struct st_tcb{
+    struct st_tcb *pre;
+    struct st_tcb *next;
+
+    int priority;
     ID tskid;
+    PRI tskpri;
     TASK_ST status;
     jmp_buf context;
+    
     FP task;
 } TCB;
-
 TCB tcb_tbl[MAX_TASK];
 
 typedef struct {
     FP task;
+    PRI tskpri;
 } T_CTSK;
-
 
 extern void dispatch(jmp_buf from, jmp_buf to);
 extern void scheduler();
