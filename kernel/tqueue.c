@@ -18,7 +18,7 @@ void tqueue_add_entry(TCB **queue, TCB *tcb) {
     tcb->next = NULL;
 }
 
-void tqueue_remove__top(TCB **queue)
+void tqueue_remove_top(TCB **queue)
 {
     TCB *top;
 
