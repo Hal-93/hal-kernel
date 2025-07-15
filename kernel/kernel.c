@@ -77,7 +77,8 @@ void dispatch(jmp_buf from, jmp_buf to) {
 
 void ini_task(void);
 T_CTSK ini_ctsk = {
-    .task = ini_task, 1
+    .task = ini_task,
+    .tskpri = 1
 };
 
 
