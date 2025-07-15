@@ -50,8 +50,21 @@ typedef enum {
 typedef enum {
     WAITFCT_NON,
     WAITFCT_DLY,
-    WAITFCT_SLP
+    WAITFCT_SLP,
+    WAITFCT_FLG
 } WAIT_FCT;
+
+typedef struct {
+	uint32_t	iflgptn;
+} T_CFLG;
+
+#define	TWF_ANDW	0
+#define	TWF_ORW		1
+
+extern ID h_cre_flg(T_CFLG *pk_cflg);
+extern ER h_set_flg(ID flgid, uint32_t setptn);
+extern ER h_clr_flg(ID flgid, uint32_t clrptn);
+extern ER h_wai_flg(ID flgid, uint32_t waiptn, uint32_t wfmode, uint32_t *p_flgptn, TMO tmout);
 
 typedef struct st_tcb{
     struct st_tcb *pre;
@@ -68,6 +81,11 @@ typedef struct st_tcb{
     RELTIM waittim;
     uint32_t wupcnt;
     ER *ercd;
+
+    ID wobjid;
+    uint32_t waiptn;
+    uint32_t wfmode;
+    uint32_t *p_flgptn;
 } TCB;
 TCB tcb_tbl[MAX_TASK];
 
@@ -93,6 +111,18 @@ extern void disable_sig(void);
 extern void enable_sig(void);
 #define BEGIN_CRITICAL_SECTION disable_sig();
 #define END_CRITICAL_SECTION enable_sig();
+
+#define MAX_FLG 5
+
+typedef enum {
+    OBJST_NON,
+    OBJST_EXIST
+} OBJ_ST;
+
+typedef struct st_flbcb {
+    OBJ_ST status;
+    uint32_t flgptn;
+} FLGCB;
 
 /* kernel API*/
 extern ID h_cre_tsk(T_CTSK *pk_ctsk);

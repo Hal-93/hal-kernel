@@ -37,6 +37,7 @@ ER h_slp_tsk(TMO tmout)
         tqueue_add_entry(&wait_queue, cur_task);
         scheduler();
     }
+    
     END_CRITICAL_SECTION
     return ercd;
 }
