@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -O2
 
-SRCS = appli.c kernel.c tqueue.c
+SRCS = appli.c kernel.c tqueue.c task_sync.c
 OBJS = $(SRCS:.c=.o)
 TARGET = main
 

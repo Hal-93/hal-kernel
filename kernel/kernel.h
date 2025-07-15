@@ -30,6 +30,10 @@ typedef uint32_t PRI;
 typedef int32_t ER;
 typedef int32_t RELTIM;
 
+typedef int32_t TMO;
+#define TMO_POL 0
+#define TMO_FEVR (-1)
+
 typedef void (*FP)(void);
 
 #define MAX_TASK 10
@@ -45,7 +49,8 @@ typedef enum {
 
 typedef enum {
     WAITFCT_NON,
-    WAITFCT_DLY
+    WAITFCT_DLY,
+    WAITFCT_SLP
 } WAIT_FCT;
 
 typedef struct st_tcb{
@@ -61,6 +66,8 @@ typedef struct st_tcb{
 
     WAIT_FCT waitfct;
     RELTIM waittim;
+    uint32_t wupcnt;
+    ER *ercd;
 } TCB;
 TCB tcb_tbl[MAX_TASK];
 
@@ -74,6 +81,12 @@ typedef struct {
     PRI tskpri;
 } T_CTSK;
 
+extern TCB		tcb_tbl[MAX_TASK];
+extern TCB		*ready_queue[MAX_PRI];
+extern TCB		*wait_queue;
+extern TCB		*cur_task;
+extern TCB		*next_task;
+
 #define TIMER_PERIOD 10
 
 extern void disable_sig(void);
@@ -84,6 +97,8 @@ extern void enable_sig(void);
 /* kernel API*/
 extern ID h_cre_tsk(T_CTSK *pk_ctsk);
 extern ER h_dly_tsk(RELTIM h_dly_tsk);
+extern ER h_slp_tsk(TMO tmout);
+extern ER h_wup_tsk(ID tskid);
 extern void scheduler(void);
 
 /* ユーザーメイン */
