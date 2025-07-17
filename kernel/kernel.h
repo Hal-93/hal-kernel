@@ -51,7 +51,9 @@ typedef enum {
     WAITFCT_NON,
     WAITFCT_DLY,
     WAITFCT_SLP,
-    WAITFCT_FLG
+    WAITFCT_FLG,
+    WAITFCT_BSEM,
+    WAITFCT_SEM
 } WAIT_FCT;
 
 typedef struct {
@@ -86,6 +88,8 @@ typedef struct st_tcb{
     uint32_t waiptn;
     uint32_t wfmode;
     uint32_t *p_flgptn;
+
+    uint32_t		semcnt;
 } TCB;
 TCB tcb_tbl[MAX_TASK];
 
@@ -124,11 +128,43 @@ typedef struct st_flbcb {
     uint32_t flgptn;
 } FLGCB;
 
+typedef struct {
+    uint32_t bsem;
+} T_CBSEM;
+
+typedef struct {
+	uint32_t	isemcnt;
+	uint32_t	maxsem;
+} T_CSEM;
+
+#define MAX_BSEM 5
+#define MAX_SEM  5
+
+typedef struct st_bsemcb {
+    OBJ_ST status;
+    uint32_t bsem;
+} BSEMCB;
+
+typedef struct st_semcb {
+	OBJ_ST			status;		// オブジェクト状態
+	uint32_t		semcnt;		// セマフォ値
+	uint32_t		maxsem;		// 最大セマフォ値
+} SEMCB;
+
+
+
+
 /* kernel API*/
 extern ID h_cre_tsk(T_CTSK *pk_ctsk);
 extern ER h_dly_tsk(RELTIM h_dly_tsk);
 extern ER h_slp_tsk(TMO tmout);
 extern ER h_wup_tsk(ID tskid);
+extern ID h_cre_bsem(T_CBSEM *pk_cbsem);
+extern ER h_wai_bsem(ID bsemid, TMO tmout);
+extern ER h_sig_bsem(ID bsemid);
+extern ID h_cre_sem( T_CSEM *pk_csem );
+extern ER h_wai_sem( ID semid, uint32_t cnt, TMO tmout );
+extern ER h_sig_sem( ID semid, uint32_t cnt);
 extern void scheduler(void);
 
 /* ユーザーメイン */
