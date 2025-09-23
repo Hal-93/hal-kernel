@@ -53,7 +53,9 @@ typedef enum {
     WAITFCT_SLP,
     WAITFCT_FLG,
     WAITFCT_BSEM,
-    WAITFCT_SEM
+    WAITFCT_SEM,
+    WAITFCT_MBFR,
+    WAITFCT_MBFS,
 } WAIT_FCT;
 
 typedef struct {
@@ -85,12 +87,17 @@ typedef struct st_tcb{
     ER *ercd;
 
     ID wobjid;
+
     uint32_t waiptn;
     uint32_t wfmode;
     uint32_t *p_flgptn;
 
-    uint32_t		semcnt;
+    uint32_t semcnt;
+
+    uint32_t msgsz;
+    const void *msg;
 } TCB;
+
 TCB tcb_tbl[MAX_TASK];
 
 /* レディキュー操作 */
@@ -152,6 +159,33 @@ typedef struct st_semcb {
 } SEMCB;
 
 
+# define MAX_MBF 5
+
+typedef struct {
+    uint32_t bufsz;
+    uint32_t maxsz;
+    void *bufptr;
+} T_CMBF;
+
+typedef struct st_ringbuf {
+    uint8_t *bufptr;
+    uint8_t *limit;
+    uint8_t *buf_rp;
+    uint8_t *buf_wp;
+} RINGBUF;
+
+typedef struct st_mbfcb {
+    OBJ_ST status;
+    uint32_t bufsz;
+    uint8_t maxsz;
+    uint32_t freesz;
+
+    RINGBUF rbuf;
+} MBFCB;
+
+extern ID h_cre_mbf( T_CMBF *pk_cmbf);
+extern ER h_snd_mbf( ID mbfid, const void *msg, uint32_t msgsz, TMO tmout);
+extern uint32_t h_rcv_mbf( ID mbfid, void *msg, TMO tmout);
 
 
 /* kernel API*/
